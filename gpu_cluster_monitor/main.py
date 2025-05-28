@@ -12,7 +12,7 @@ import argparse
 import os
 import yaml
 import sys
-from ._version import __version__ as app_version
+
 
 # --- Default Configuration ---
 DEFAULT_CLUSTER_CONFIG_DIR = os.path.expanduser("~/.gpu-cluster-monitor")
@@ -896,12 +896,6 @@ Examples:
   gpu-cluster-monitor remove old_cluster       # Interactively remove 'old_cluster'
   gpu-cluster-monitor settings init            # Create a default settings.yaml file
 """,
-    )
-    parser.add_argument(
-        "--version",
-        action="version",
-        version=f"%(prog)s {app_version}",
-        help="Show program's version number and exit.",
     )
     parser.add_argument(
         "-c",

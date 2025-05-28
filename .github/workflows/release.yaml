@@ -1,34 +1,69 @@
-name: Publish Python Package to PyPI
+name: Publish to PyPI
 
 on:
   release:
     types: [published]
   workflow_dispatch:  # Allows manual triggering
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write  # For PyPI trusted publishing
+
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write # Required for trusted publishing with PyPI
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }} 
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        include:
+          - archs: native
+            platform: linux
 
     steps:
-    - name: Check out repository # Added a name for clarity
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+  
+    - name: Build wheels
+      uses: pypa/cibuildwheel@v2.23.3
+      env:
+        CIBW_PLATFORM: ${{ matrix.platform }}
+        CIBW_ARCHS: ${{ matrix.archs }}
+
+    - uses: actions/upload-artifact@v4
       with:
-        fetch-depth: 0 # Fetches all history for all branches and tags
+        name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+        path: ./wheelhouse/*.whl
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
-
-    - name: Install build dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build setuptools-scm # Explicitly add setuptools-scm here
-
-    - name: Build package
-      run: python -m build
-
-    - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build sdist
+        run: pipx run build --sdist
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-sdist
+          path: dist/*.tar.gz
+      
+  publish:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+  
+    environment:
+      name: pypi
+      url: https://pypi.org/p/gpu-cluster-monitor
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # unpacks all CIBW artifacts into dist/
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@release/v1

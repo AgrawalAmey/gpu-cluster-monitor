@@ -12,21 +12,23 @@ jobs:
       id-token: write # Required for trusted publishing with PyPI
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Check out repository # Added a name for clarity
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Fetches all history for all branches and tags
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # Use a general version for building
+        python-version: '3.x'
 
     - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build
+        pip install build setuptools-scm # Explicitly add setuptools-scm here
 
     - name: Build package
       run: python -m build
 
     - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
-

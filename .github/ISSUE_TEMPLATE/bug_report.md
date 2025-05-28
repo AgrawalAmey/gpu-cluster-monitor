@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Environment (please complete the following information):**
  - OS: [e.g. Ubuntu 22.04, macOS Sonoma, Windows 11]
  - Python version: [e.g. 3.10.4]
- - gpu-monitor version: [e.g. 0.2.0 or output of `gpu-monitor --version` if available]
+ - gpu-cluster-monitor version: [e.g. 0.2.0 or output of `gpu-cluster-monitor --version` if available]
  - SSH client and version (if relevant): [e.g., OpenSSH_8.9p1, PuTTY 0.78]
  - Remote host OS (if relevant): [e.g. Ubuntu 20.04]
  - `nvidia-smi` version on remote host (if relevant):

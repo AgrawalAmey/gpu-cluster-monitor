@@ -1,4 +1,4 @@
-# Makefile for gpu-monitor
+# Makefile for gpu-cluster-monitor
 
 # Default Python interpreter
 PYTHON ?= python3

@@ -1,5 +1,5 @@
 [project]
-name = "gpu-monitor"
+name = "gpu-cluster-monitor"
 version = "0.2.0"
 description = "A CLI dashboard to monitor GPU utilization and other metrics on remote hosts via SSH."
 readme = "README.md"
@@ -29,11 +29,11 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/AgrawalAmey/gpu-monitor"
-"Bug Tracker" = "https://github.com/AgrawalAmey/gpu-monitor/issues"
+"Homepage" = "https://github.com/AgrawalAmey/gpu-cluster-monitor"
+"Bug Tracker" = "https://github.com/AgrawalAmey/gpu-cluster-monitor/issues"
 
 [project.scripts]
-gpu-monitor = "gpu_monitor.main:main"
+gpu-cluster-monitor = "gpu_cluster_monitor.main:main"
 
 [project.optional-dependencies]
 dev = [
@@ -47,4 +47,4 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["gpu_monitor*"] # Include only the gpu_monitor package and its potential submodules
+include = ["gpu_cluster_monitor*"] # Include only the gpu_cluster_monitor package and its potential submodules

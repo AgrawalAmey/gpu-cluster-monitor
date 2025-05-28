@@ -16,7 +16,7 @@ import datetime
 
 # --- Default Configuration ---
 REFRESH_INTERVAL = 5
-DEFAULT_CLUSTER_CONFIG_DIR = os.path.expanduser("~/.gpu-monitor")
+DEFAULT_CLUSTER_CONFIG_DIR = os.path.expanduser("~/.gpu-cluster-monitor")
 
 # --- Thresholds for color coding ---
 UTILIZATION_WARN_THRESHOLD = 75
@@ -439,7 +439,7 @@ def list_cluster_configs(config_dir):
         files = [f for f in os.listdir(config_dir) if f.endswith((".yaml", ".yml"))]
         if not files:
             CONSOLE.print(f"No cluster configuration files found in '{config_dir}'.")
-            CONSOLE.print(f"Use 'gpu-monitor add-cluster <new_cluster_name>' to create one.")
+            CONSOLE.print(f"Use 'gpu-cluster-monitor add-cluster <new_cluster_name>' to create one.")
             return []
         CONSOLE.print(f"[bold]Available cluster configurations in '{config_dir}':[/bold]")
         for f in sorted(files): CONSOLE.print(f"  - {os.path.splitext(f)[0]}")
@@ -524,13 +524,13 @@ def remove_cluster_interactive(config_dir: str, cluster_name: str):
         CONSOLE.print("Removal aborted.")
 
 def run_monitor(args):
-    """Main logic for running the GPU monitor dashboard."""
+    """Main logic for running the GPU cluster monitor dashboard."""
     ensure_config_dir_exists(args.config_dir)
 
     if not args.cluster_config_name:
         CONSOLE.print("[bold red]Error: Cluster configuration name not provided for monitoring.[/bold red]")
         list_cluster_configs(args.config_dir)
-        CONSOLE.print(f"\nUsage: gpu-monitor monitor <cluster_config_name> [options]")
+        CONSOLE.print(f"\nUsage: gpu-cluster-monitor monitor <cluster_config_name> [options]")
         return
 
     config_file_path = os.path.join(args.config_dir, f"{args.cluster_config_name}.yaml")
@@ -652,7 +652,7 @@ def run_monitor(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="GPU Monitor CLI. Manages and displays GPU stats from remote hosts.",
+        description="GPU Cluster Monitor CLI. Manages and displays GPU stats from remote hosts.",
         formatter_class=argparse.RawTextHelpFormatter # Allows for better help text formatting
     )
     # Global argument applicable to all subcommands that might use it
@@ -689,7 +689,7 @@ def main():
 
     args = parser.parse_args()
 
-    # Ensure the main config directory (e.g. ~/.gpu-monitor) exists before any command that might need it.
+    # Ensure the main config directory (e.g. ~/.gpu-cluster-monitor) exists before any command that might need it.
     # Specific functions like add_cluster_interactive also call this, but it's good for robustness.
     if hasattr(args, 'config_dir'): # All our commands should have it due to global arg or specific add.
         ensure_config_dir_exists(args.config_dir)

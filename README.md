@@ -1,4 +1,4 @@
-# GPU Monitor
+# GPU Cluster Monitor
 
 A CLI dashboard to monitor GPU utilization, temperature, memory, and power usage on remote hosts via SSH. It provides a live-updating table view, summarizing GPU status across multiple machines defined in a cluster configuration file.
 
@@ -22,7 +22,7 @@ A CLI dashboard to monitor GPU utilization, temperature, memory, and power usage
 
 ## Installation
 
-It is highly recommended to install `gpu-monitor` in a virtual environment.
+It is highly recommended to install `gpu-cluster-monitor` in a virtual environment.
 
 1.  **Create and activate a virtual environment (recommended):**
     ```bash
@@ -30,14 +30,14 @@ It is highly recommended to install `gpu-monitor` in a virtual environment.
     source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
     ```
 
-2.  **Install `gpu-monitor` from PyPI:**
+2.  **Install `gpu-cluster-monitor` from PyPI:**
     ```bash
-    pip install gpu-monitor
+    pip install gpu-cluster-monitor
     ```
 
 ## Configuration
 
-`gpu-monitor` stores its cluster configuration files by default in `~/.config/gpu-monitor/clusters/` (on Linux/macOS) or the appropriate user config directory for your OS. You can manage these configurations using the `gpu-monitor add-cluster` and `gpu-monitor list-clusters` commands.
+`gpu-cluster-monitor` stores its cluster configuration files by default in `~/.config/gpu-cluster-monitor/clusters/` (on Linux/macOS) or the appropriate user config directory for your OS. You can manage these configurations using the `gpu-cluster-monitor add-cluster` and `gpu-cluster-monitor list-clusters` commands.
 
 Alternatively, you can specify a custom configuration directory using the `--config-dir` option with any command.
 
@@ -55,47 +55,47 @@ hosts:
 -   `cluster_name`: A display name for your dashboard.
 -   `hosts`: A list of hostnames or IP addresses of the machines to monitor. Your `~/.ssh/config` will be used for connection details like username, port, identity files, proxy commands, etc.
 
-Use the `gpu-monitor add-cluster <cluster_name>` command to interactively create a new configuration file.
+Use the `gpu-cluster-monitor add-cluster <cluster_name>` command to interactively create a new configuration file.
 
 ## Usage
 
-After installation, you can run the monitor using the `gpu-monitor` command.
+After installation, you can run the monitor using the `gpu-cluster-monitor` command.
 
 **Commands:**
 
-*   `gpu-monitor monitor <cluster_name> [options]`
+*   `gpu-cluster-monitor monitor <cluster_name> [options]`
     *   Monitors the specified cluster.
     *   `--user USERNAME`: SSH username (overrides `~/.ssh/config` or system defaults).
     *   `--interval SECONDS`: Refresh interval (default: 2 seconds).
     *   `--show-all-gpus`: Show detailed GPU table in addition to summaries.
-    *   `--config-dir DIRECTORY`: Override default config directory (`~/.config/gpu-monitor/clusters/`).
+    *   `--config-dir DIRECTORY`: Override default config directory (`~/.config/gpu-cluster-monitor/clusters/`).
 
-*   `gpu-monitor list-clusters [--config-dir DIRECTORY]`
+*   `gpu-cluster-monitor list-clusters [--config-dir DIRECTORY]`
     *   Lists available cluster configurations from the config directory.
 
-*   `gpu-monitor add-cluster <new_cluster_name> [--config-dir DIRECTORY]`
+*   `gpu-cluster-monitor add-cluster <new_cluster_name> [--config-dir DIRECTORY]`
     *   Interactively helps you create a new cluster configuration file.
 
-*   `gpu-monitor remove-cluster <cluster_to_remove> [--config-dir DIRECTORY]`
+*   `gpu-cluster-monitor remove-cluster <cluster_to_remove> [--config-dir DIRECTORY]`
     *   Removes an existing cluster configuration file after confirmation.
 
 **Example: Monitoring a cluster**
 
 1.  Add a cluster configuration if you haven't already:
     ```bash
-    gpu-monitor add-cluster my_servers
+    gpu-cluster-monitor add-cluster my_servers
     ```
     (Follow the prompts to add hostnames)
 
 2.  Monitor the cluster:
     ```bash
-    gpu-monitor monitor my_servers
+    gpu-cluster-monitor monitor my_servers
     ```
 
 **To list available clusters:**
 
 ```bash
-gpu-monitor list-clusters
+gpu-cluster-monitor list-clusters
 ```
 
 ## Troubleshooting
@@ -104,8 +104,8 @@ gpu-monitor list-clusters
 *   **Could not resolve hostname:** Check that the hostname is correct and resolvable from the machine running the monitor.
 *   **Connection timed out:** Verify network connectivity to the host and that the SSH port (usually 22) is open. Check `ProxyCommand` settings in `~/.ssh/config` if you use a bastion/jump host.
 *   **`nvidia-smi` not found on host:** Ensure `nvidia-smi` is installed and in the `PATH` for the SSH user on the remote machine.
-*   **`'ssh' command not found locally`:** Make sure the OpenSSH client is installed on the machine where you are running `gpu-monitor`.
-*   **Configuration file issues:** If you suspect a problem with a config file, you can try removing it (e.g., `gpu-monitor remove-cluster <name>`) and adding it again.
+*   **`'ssh' command not found locally`:** Make sure the OpenSSH client is installed on the machine where you are running `gpu-cluster-monitor`.
+*   **Configuration file issues:** If you suspect a problem with a config file, you can try removing it (e.g., `gpu-cluster-monitor remove-cluster <name>`) and adding it again.
 
 ## Contributing & Development
 
@@ -115,8 +115,8 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/AgrawalAmey/gpu-monitor.git
-    cd gpu-monitor
+    git clone https://github.com/AgrawalAmey/gpu-cluster-monitor.git
+    cd gpu-cluster-monitor
     ```
 
 2.  **Create and activate a virtual environment (recommended):**
@@ -142,16 +142,16 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 
 If you have cloned the repository and installed dependencies in editable mode, you can invoke the CLI directly:
 ```bash
-gpu-monitor --help
+gpu-cluster-monitor --help
 ```
 
 Alternatively, to run the module directly without relying on the entry point (useful for some debugging scenarios):
 ```bash
-python -m gpu_monitor.main monitor <cluster_config_name> [options]
+python -m gpu_cluster_monitor.main monitor <cluster_config_name> [options]
 # Example for adding a cluster using local config files:
-# python -m gpu_monitor.main add-cluster dev_cluster --config-dir ./clusters_config
+# python -m gpu_cluster_monitor.main add-cluster dev_cluster --config-dir ./clusters_config
 ```
-Note: When running with `python -m`, if you want to use local `clusters_config` files from the project root for testing, you'll need to specify `--config-dir ./clusters_config` as the default will still be `~/.config/gpu-monitor/clusters/`.
+Note: When running with `python -m`, if you want to use local `clusters_config` files from the project root for testing, you'll need to specify `--config-dir ./clusters_config` as the default will still be `~/.config/gpu-cluster-monitor/clusters/`.
 
 ### Makefile for Development
 

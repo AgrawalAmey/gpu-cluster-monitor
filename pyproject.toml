@@ -1,5 +1,6 @@
 [project]
 name = "gpu-cluster-monitor"
+dynamic = ["version"]
 description = "A CLI dashboard to monitor GPU utilization and other metrics on remote hosts via SSH."
 readme = "README.md"
 requires-python = ">=3.10"

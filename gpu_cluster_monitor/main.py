@@ -7,6 +7,7 @@ from rich.console import Console, Group
 from rich.text import Text
 from rich.style import Style
 from rich.panel import Panel
+import rich.box # Added for table box styles
 import argparse
 import os
 import yaml
@@ -335,6 +336,8 @@ def generate_host_summary_table(
         title=f"Cluster Overview: [bold cyan]{cluster_display_name}[/bold cyan]",
         show_lines=False,
         expand=True,
+        box=rich.box.ROUNDED,  # Added box style
+        show_edge=True         # Ensure edge is shown with box style
     )
     table.add_column(
         "Host", style=STYLE_HOST, min_width=18, ratio=2
@@ -397,15 +400,20 @@ def generate_host_summary_table(
             data["error"] and not data["gpus"]
         ):  # Host-level error and no GPU data to parse
             host_display_name = f"{host_status_emoji} {host}"
+            
+            # Determine a concise error message for the table cell
+            error_message_for_cell = data["error"]
+            # Keywords indicating a general SSH communication problem
+            ssh_comm_keywords = ["connection", "resolve", "timeout", "permission", "unreachable", "batchmode", "port"]
+            if any(kw in error_message_for_cell.lower() for kw in ssh_comm_keywords):
+                error_message_for_cell = "SSH Comms Error"
+            # Other specific errors like "nvidia-smi not found" will be shown but truncated by ellipsis if too long
+
             table.add_row(
                 host_display_name,
-                Text("N/A", style=STYLE_ERROR),
-                Text(data["error"], style=STYLE_ERROR, overflow="fold"),
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
+                Text("N/A", style=STYLE_ERROR), # GPUs (Busy/Total)
+                Text(error_message_for_cell, style=STYLE_ERROR, overflow="ellipsis"), # Available GPU IDs
+                "-", "-", "-", "-", "-",
             )
             continue
 
@@ -572,7 +580,7 @@ def generate_problem_gpus_table(
         expand=True,
         show_lines=True,
         show_edge=True,
-        box=None,
+        box=rich.box.ROUNDED # Changed from None
     )
     table.add_column("Host", style=STYLE_HOST, min_width=12)
     table.add_column("GPU ID", justify="center", min_width=4)
@@ -656,7 +664,7 @@ def generate_detailed_gpu_table(
         expand=True,
         show_lines=True,
         show_edge=True,
-        box=None,
+        box=rich.box.ROUNDED # Changed from None
     )
     table.add_column("Host", style=STYLE_HOST, justify="left", min_width=12)
     table.add_column("GPU ID", justify="center", min_width=4)

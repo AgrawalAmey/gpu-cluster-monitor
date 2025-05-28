@@ -895,13 +895,13 @@ Examples:
   gpu-cluster-monitor add my_new_cluster       # Interactively add 'my_new_cluster'
   gpu-cluster-monitor remove old_cluster       # Interactively remove 'old_cluster'
   gpu-cluster-monitor settings init            # Create a default settings.yaml file
-"""
+""",
     )
     parser.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {app_version}",
-        help="Show program's version number and exit."
+        help="Show program's version number and exit.",
     )
     parser.add_argument(
         "-c",
@@ -921,7 +921,7 @@ Examples:
     # Mark 'command' as required if you want to force a subcommand to be specified.
     # subparsers.required = True # Uncomment if a command should always be given
 
-    # --- Monitor Command --- 
+    # --- Monitor Command ---
     monitor_parser = subparsers.add_parser(
         "monitor",
         help="Run the GPU monitoring dashboard (default if no command specified).",
@@ -961,7 +961,8 @@ Examples:
         dest="settings_action", help="Settings actions", required=True
     )
     init_parser = settings_subparsers.add_parser(
-        "init", help=f"Create a default {GLOBAL_SETTINGS_FILENAME} file in the config directory."
+        "init",
+        help=f"Create a default {GLOBAL_SETTINGS_FILENAME} file in the config directory.",
     )
     init_parser.set_defaults(func=execute_settings_init_command)
 

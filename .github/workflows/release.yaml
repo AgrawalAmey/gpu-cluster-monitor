@@ -32,15 +32,6 @@ jobs:
         python -m build --no-isolation --wheel
         python -m build --no-isolation --sdist
 
-    - name: Prepare PyPI distribution
-      run: |
-        mkdir pypi_dist
-        for f in dist/*.whl; do
-          # change linux to manylinux1 in the wheel name
-          new_f_name=$(echo $f | sed 's/linux/manylinux1/')
-          mv $f $new_f_name
-        done
-
     - name: Store the distribution packages
       uses: actions/upload-artifact@v4
       with:

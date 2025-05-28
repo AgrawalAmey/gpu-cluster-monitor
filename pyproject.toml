@@ -1,52 +1,8 @@
-[project]
-name = "gpu-cluster-monitor"
-dynamic = ["version"]
-description = "A CLI dashboard to monitor GPU utilization and other metrics on remote hosts via SSH."
-readme = "README.md"
-requires-python = ">=3.10"
-authors = [
-    { name = "Amey Agrawal", email = "agrawalamey12@gmail.com" },
-]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Environment :: Console",
-    "Intended Audience :: System Administrators",
-    "Intended Audience :: Developers",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: System :: Monitoring",
-    "Topic :: Utilities",
-]
-keywords = ["gpu", "monitor", "dashboard", "cli", "ssh", "nvidia", "nvidia-smi", "rich"]
-
-dependencies = [
-    "rich>=13.0.0",
-    "PyYAML>=6.0"
-]
-
-[project.urls]
-"Homepage" = "https://github.com/AgrawalAmey/gpu-cluster-monitor"
-"Bug Tracker" = "https://github.com/AgrawalAmey/gpu-cluster-monitor/issues"
-
-[project.scripts]
-gpu-cluster-monitor = "gpu_cluster_monitor.main:main"
-
-[project.optional-dependencies]
-dev = [
-    "build>=0.10.0",
-    "twine>=4.0.0",
-    "ruff>=0.1.0" # For linting and formatting
-]
-
 [build-system]
-requires = ["setuptools>=61.0", "wheel", "setuptools-scm[toml]>=8.0"]
+requires = [
+    "packaging",
+    "setuptools>=61",
+    "setuptools-scm>=8.0",
+    "wheel",
+]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-include = ["gpu_cluster_monitor*"] # Include only the gpu_cluster_monitor package and its potential submodules
-
-[tool.setuptools_scm]
-write_to = "gpu_cluster_monitor/_version.py"

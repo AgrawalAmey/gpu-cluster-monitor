@@ -1,6 +1,6 @@
 [project]
 name = "gpu-cluster-monitor"
-version = "0.2.0"
+dynamic = ["version"]
 description = "A CLI dashboard to monitor GPU utilization and other metrics on remote hosts via SSH."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -43,8 +43,11 @@ dev = [
 ]
 
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=61.0", "wheel", "setuptools-scm[toml]>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["gpu_cluster_monitor*"] # Include only the gpu_cluster_monitor package and its potential submodules
+
+[tool.setuptools_scm]
+write_to = "gpu_cluster_monitor/_version.py"

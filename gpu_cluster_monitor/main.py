@@ -12,6 +12,7 @@ import argparse
 import os
 import yaml
 import sys
+from ._version import __version__ as app_version
 
 # --- Default Configuration ---
 DEFAULT_CLUSTER_CONFIG_DIR = os.path.expanduser("~/.gpu-cluster-monitor")
@@ -883,26 +884,44 @@ def remove_cluster_interactive(config_dir: str, cluster_name: str):
 
 def setup_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="GPU Cluster Monitor CLI. Manages and displays GPU stats from remote hosts.",
+        description="GPU Cluster Monitor: A CLI dashboard for monitoring GPU metrics on remote hosts.",
         formatter_class=argparse.RawTextHelpFormatter,
+        epilog="""
+Examples:
+  gpu-cluster-monitor monitor my_cluster         # Monitor 'my_cluster'
+  gpu-cluster-monitor monitor                  # Monitor all clusters defined in clusters.yaml
+  gpu-cluster-monitor monitor --refresh 2      # Monitor all clusters, refresh every 2 seconds
+  gpu-cluster-monitor list                     # List available cluster configurations
+  gpu-cluster-monitor add my_new_cluster       # Interactively add 'my_new_cluster'
+  gpu-cluster-monitor remove old_cluster       # Interactively remove 'old_cluster'
+  gpu-cluster-monitor settings init            # Create a default settings.yaml file
+""",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {app_version}",
+        help="Show program's version number and exit.",
     )
     parser.add_argument(
         "-c",
         "--config",
         type=str,
-        default="~/.gpu-cluster-monitor/clusters.yaml",
-        help="Path to the cluster configuration YAML file. Default: ~/.gpu-cluster-monitor/clusters.yaml",
+        default=os.path.join(DEFAULT_CLUSTER_CONFIG_DIR, "clusters.yaml"),
+        help=f"Path to the cluster configuration YAML file. Default: {os.path.join(DEFAULT_CLUSTER_CONFIG_DIR, 'clusters.yaml')}",
     )
     parser.add_argument(
         "--config-dir",
         type=str,
-        default=os.path.expanduser("~/.gpu-cluster-monitor"),
-        help="Path to the configuration directory. Default: ~/.gpu-cluster-monitor",
+        default=DEFAULT_CLUSTER_CONFIG_DIR,
+        help=f"Path to the configuration directory. Default: {DEFAULT_CLUSTER_CONFIG_DIR}",
     )
 
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+    subparsers = parser.add_subparsers(dest="command", title="Available commands")
+    # Mark 'command' as required if you want to force a subcommand to be specified.
+    # subparsers.required = True # Uncomment if a command should always be given
 
-    # 'monitor' subcommand
+    # --- Monitor Command ---
     monitor_parser = subparsers.add_parser(
         "monitor",
         help="Run the GPU monitoring dashboard (default if no command specified).",

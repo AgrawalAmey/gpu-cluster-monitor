@@ -5,6 +5,7 @@ build/
 dist/
 wheels/
 *.egg-info
+gpu_cluster_monitor/_version.py
 
 # Virtual environments
 .venv
